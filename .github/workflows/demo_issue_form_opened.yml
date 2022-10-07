@@ -1,0 +1,44 @@
+name: Demo Issue Form Opened
+
+on:
+  workflow_call:
+    inputs:
+      repository_name:
+        description: The name of the template repository
+        type: string
+        required: true
+  workflow_dispatch:
+    inputs:
+      repository_name:
+        description: The name of the template repository
+        type: string
+        required: true 
+        default: tmpl-workflows-100 
+
+jobs:
+  create_demo:
+    name: Create Demo Repository and Resources
+    runs-on: ubuntu-20.04
+    environment:
+      name: ${{ inputs.repository_name }}
+    steps:
+
+      - name: Get Token for checkout
+        id: get_workflow_token
+        uses: peter-murray/workflow-application-token-action@v1
+        with:
+          application_id: ${{ secrets.github_application_id }}
+          application_private_key: ${{ secrets.github_application_key }}
+          organization: msanzdelrio-demo-resources
+
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Checkout template Repository
+        uses: actions/checkout@v3
+        with:
+          repository: msanzdelrio-demo-resources/${{ inputs.repository_name }}
+          ref: main
+          token: ${{ steps.get_workflow_token.outputs.token }}
+          persist-credentials: false
+          path: template
