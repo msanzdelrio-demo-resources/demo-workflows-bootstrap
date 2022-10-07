@@ -42,3 +42,8 @@ jobs:
           token: ${{ steps.get_workflow_token.outputs.token }}
           persist-credentials: false
           path: template
+
+      - run: gh repo create margaritasdr/my-project --private --source=./template --remote=upstream
+        env:
+          GITHUB_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
+          ISSUE: ${{ github.event.issue.html_url }}
