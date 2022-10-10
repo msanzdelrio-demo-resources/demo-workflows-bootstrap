@@ -71,14 +71,13 @@ jobs:
       #         name: '${{ inputs.repository_name }}',
       #       });
 
-      - uses: oleksiyrudenko/gha-git-credentials@v2.1
-        with:
-          token: ${{ steps.get_workflow_token_target.outputs.token }}
 
       - name: Push repository changes
+        env:
+          GITHUB_TOKEN: ${{ steps.get_workflow_token_target.outputs.token }}
         run: |
           cd ./template
           git init 
           git commit -m 'My first commit'
-          git remote set-url origin https://github.com/${{ inputs.organization_name }}/${{ inputs.repository_name }}.git
+          git remote set-url origin https://${{ secrets.APP_ID }}:${{ env.GITHUB_TOKEN }}github.com/${{ inputs.organization_name }}/${{ inputs.repository_name }}.git
           git push -u origin main
