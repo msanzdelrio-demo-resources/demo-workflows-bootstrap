@@ -3,12 +3,21 @@ name: Demo Issue Form Opened
 on:
   workflow_call:
     inputs:
+      organization_name:
+        description: The name of the target organization
+        type: string
+        required: true
       repository_name:
         description: The name of the template repository
         type: string
         required: true
   workflow_dispatch:
     inputs:
+      organization_name:
+        description: The name of the target organization
+        type: string
+        required: true
+        default: margaritasdr
       repository_name:
         description: The name of the template repository
         type: string
@@ -43,18 +52,13 @@ jobs:
           persist-credentials: false
           path: template
 
-      - name: Echo
-        run: |
-          cd ./template
-          ls
-
       - name: Get Token for checkout target organizatiom
         id: get_workflow_token_target
         uses: peter-murray/workflow-application-token-action@v1
         with:
           application_id: ${{ secrets.APP_ID }}
           application_private_key: ${{ secrets.APP_SECRET }}
-          organization: margaritasdr
+          organization: ${{ inputs.organization_name }}
 
       - name: Create target repository
         id: create_repository
@@ -63,6 +67,25 @@ jobs:
           github-token: ${{ steps.get_workflow_token_target.outputs.token }}
           script: |
             github.rest.repos.createInOrg({
-              org: 'margaritasdr',
+              org: ${{ inputs.organization_name }},
               name: ${{ inputs.repository_name }},
             })
+
+      - name: Create target repository
+        id: create_repository
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ steps.get_workflow_token_target.outputs.token }}
+          script: |
+            github.rest.repos.createInOrg({
+              org: ${{ inputs.organization_name }},
+              name: ${{ inputs.repository_name }},
+            })
+
+      - name: Push repository changes
+        run: |
+          cd ./template
+          git init 
+          git commit -m 'My first commit'
+          git remote set-url origin https://github.com/${{ inputs.organization_name }}/${{ inputs.repository_name }}.git
+          git push -u origin main
