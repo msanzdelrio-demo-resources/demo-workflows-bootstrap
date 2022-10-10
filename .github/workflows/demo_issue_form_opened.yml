@@ -77,6 +77,8 @@ jobs:
           GITHUB_TOKEN: ${{ steps.get_workflow_token_target.outputs.token }}
         run: |
           cd ./template
+          git config --global user.email "msanzdelrio@github.com"
+          git config --global user.name "msanzdelriodemo"
           git commit -m 'My first commit'
           git remote set-url origin https://${{ secrets.APP_ID }}:${{ env.GITHUB_TOKEN }}github.com/${{ inputs.organization_name }}/${{ inputs.repository_name }}.git
           
