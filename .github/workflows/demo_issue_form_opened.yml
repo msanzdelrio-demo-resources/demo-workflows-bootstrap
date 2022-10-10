@@ -43,11 +43,12 @@ jobs:
           persist-credentials: false
           path: template
 
-      - run: |
-          git init ./template
-          git add ./template
-          git commit ./template
-          echo $GITHUB_REPOSITORY_OWNER
-
-        env:
-          GITHUB_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
+      - name: Create target repository
+        id: create_repository
+        uses: actions/github-script@v6
+        with:
+          script: |
+            octokit.rest.repos.createInOrg({
+              org: margaritasdr,
+              name: context.repo.repo,
+            })
