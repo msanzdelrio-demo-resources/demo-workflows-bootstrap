@@ -77,8 +77,7 @@ jobs:
           GITHUB_TOKEN: ${{ steps.get_workflow_token_target.outputs.token }}
         run: |
           cd ./template
-          git init 
           git commit -m 'My first commit'
-      #git remote set-url origin https://${{ secrets.APP_ID }}:${{ env.GITHUB_TOKEN }}github.com/${{ inputs.organization_name }}/${{ inputs.repository_name }}.git
+          git remote set-url origin https://${{ secrets.APP_ID }}:${{ env.GITHUB_TOKEN }}github.com/${{ inputs.organization_name }}/${{ inputs.repository_name }}.git
           
       #git push https://${{ secrets.APP_ID }}:${{ env.GITHUB_TOKEN }}github.com/${{ inputs.organization_name }}/${{ inputs.repository_name }}.git
