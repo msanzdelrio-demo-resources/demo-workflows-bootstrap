@@ -58,7 +58,7 @@ jobs:
         with:
           application_id: ${{ secrets.APP_ID }}
           application_private_key: ${{ secrets.APP_SECRET }}
-          organization: ${{ inputs.organization_name }}
+          organization: {{ inputs.organization_name }}
 
       - name: Create target repository
         id: create_repository
@@ -67,9 +67,9 @@ jobs:
           github-token: ${{ steps.get_workflow_token_target.outputs.token }}
           script: |
             github.rest.repos.createInOrg({
-              org: ${{ inputs.organization_name }},
-              name: ${{ inputs.repository_name }},
-            })
+              org: '${{ inputs.organization_name }}',
+              name: '${{ inputs.repository_name }}',
+            });
 
       - name: Push repository changes
         run: |
