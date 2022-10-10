@@ -69,7 +69,7 @@ jobs:
             github.rest.repos.createInOrg({
               org: ${{ inputs.organization_name }},
               name: ${{ inputs.repository_name }},
-            })∫
+            })
 
       - name: Push repository changes
         run: |
