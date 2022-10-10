@@ -58,7 +58,7 @@ jobs:
         with:
           application_id: ${{ secrets.APP_ID }}
           application_private_key: ${{ secrets.APP_SECRET }}
-          organization: {{ inputs.organization_name }}
+          organization: ${{ inputs.organization_name }}
 
       - name: Create target repository
         id: create_repository
