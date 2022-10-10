@@ -43,7 +43,11 @@ jobs:
           persist-credentials: false
           path: template
 
-      - run: gh repo create margaritasdr/my-project --private --source=./template --remote=upstream
+      - run: |
+          git init ./template
+          git add ./template
+          git commit ./template
+          echo $GITHUB_REPOSITORY_OWNER
+
         env:
           GITHUB_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
-          ISSUE: ${{ github.event.issue.html_url }}
