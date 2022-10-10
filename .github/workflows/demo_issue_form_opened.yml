@@ -47,8 +47,9 @@ jobs:
         id: create_repository
         uses: actions/github-script@v6
         with:
+          github-token: ${{ steps.get_workflow_token.outputs.token }}
           script: |
-            octokit.rest.repos.createInOrg({
+            github.rest.repos.createInOrg({
               org: margaritasdr,
               name: context.repo.repo,
             })
