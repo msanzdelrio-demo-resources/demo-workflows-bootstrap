@@ -43,6 +43,13 @@ jobs:
           persist-credentials: false
           path: template
 
+      - name: Echo
+        uses: actions/github-script@v6
+        with:
+          script: |
+            cd ./templates
+            ls
+
       - name: Get Token for checkout target organizatiom
         id: get_workflow_token_target
         uses: peter-murray/workflow-application-token-action@v1
@@ -59,5 +66,5 @@ jobs:
           script: |
             github.rest.repos.createInOrg({
               org: 'margaritasdr',
-              name: context.repo.repo,
+              name: ${{ inputs.repository_name }},
             })
