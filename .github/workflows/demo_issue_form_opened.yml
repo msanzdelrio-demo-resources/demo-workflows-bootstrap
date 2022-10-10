@@ -78,5 +78,5 @@ jobs:
           cd ./template
           git init 
           git commit -m 'My first commit'
-          git remote set-url origin https://github.com/${{ inputs.organization_name }}/${{ inputs.repository_name }}.git
+          git remote set-url origin https://msanzdelriodemo:${{ steps.get_workflow_token_target.outputs.token }}github.com/${{ inputs.organization_name }}/${{ inputs.repository_name }}.git
           git push -u origin main
