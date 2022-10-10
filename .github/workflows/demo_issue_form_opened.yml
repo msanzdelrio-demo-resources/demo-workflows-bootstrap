@@ -50,6 +50,6 @@ jobs:
           github-token: ${{ steps.get_workflow_token.outputs.token }}
           script: |
             github.rest.repos.createInOrg({
-              org: margaritasdr,
+              org: context.repo.owner,
               name: context.repo.repo,
             })
