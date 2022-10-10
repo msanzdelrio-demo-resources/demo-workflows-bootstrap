@@ -23,8 +23,8 @@ jobs:
       name: ${{ inputs.repository_name }}
     steps:
 
-      - name: Get Token for checkout
-        id: get_workflow_token
+      - name: Get Token for checkout origin organization
+        id: get_workflow_token_origin
         uses: peter-murray/workflow-application-token-action@v1
         with:
           application_id: ${{ secrets.APP_ID }}
@@ -39,15 +39,23 @@ jobs:
         with:
           repository: msanzdelrio-demo-resources/${{ inputs.repository_name }}
           ref: main
-          token: ${{ steps.get_workflow_token.outputs.token }}
+          token: ${{ steps.get_workflow_token_origin.outputs.token }}
           persist-credentials: false
           path: template
+
+      - name: Get Token for checkout target organizatiom
+        id: get_workflow_token_target
+        uses: peter-murray/workflow-application-token-action@v1
+        with:
+          application_id: ${{ secrets.APP_ID }}
+          application_private_key: ${{ secrets.APP_SECRET }}
+          organization: margaritasdr
 
       - name: Create target repository
         id: create_repository
         uses: actions/github-script@v6
         with:
-          github-token: ${{ steps.get_workflow_token.outputs.token }}
+          github-token: ${{ steps.get_workflow_token_target.outputs.token }}
           script: |
             github.rest.repos.createInOrg({
               org: 'margaritasdr',
