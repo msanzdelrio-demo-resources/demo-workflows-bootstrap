@@ -45,7 +45,7 @@ jobs:
 
       - name: Echo
         run: |
-          cd ./templates/
+          cd ./template
           ls
 
       - name: Get Token for checkout target organizatiom
