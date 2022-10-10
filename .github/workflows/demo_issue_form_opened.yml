@@ -44,11 +44,9 @@ jobs:
           path: template
 
       - name: Echo
-        uses: actions/github-script@v6
-        with:
-          script: |
-            cd ./templates
-            ls
+        run: |
+          cd ./templates/
+          ls
 
       - name: Get Token for checkout target organizatiom
         id: get_workflow_token_target
