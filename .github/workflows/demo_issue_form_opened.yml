@@ -71,10 +71,12 @@ jobs:
       #         name: '${{ inputs.repository_name }}',
       #       });
 
-    - uses: oleksiyrudenko/gha-git-credentials@v2
-      with:
-        token: ${{ steps.get_workflow_token_target.outputs.token }}
-    - run: |
+      - uses: oleksiyrudenko/gha-git-credentials@v2.1
+        with:
+          token: ${{ steps.get_workflow_token_target.outputs.token }}
+
+      - name: Push repository changes
+        run: |
           cd ./template
           git init 
           git commit -m 'My first commit'
