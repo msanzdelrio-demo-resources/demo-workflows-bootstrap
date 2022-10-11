@@ -43,10 +43,10 @@ jobs:
           script: |
             demoPayload = JSON.parse(process.env.demo_payload);
             const user = demoPayload['User-Handle'];
-            core.info(`This is the user: ${user}`);
             const organization = demoPayload['Target-Organization'];
             const repository = demoPayload['Demo-Repository'];
-            core.setOutput('user', ${user});
+
+            core.setOutput('user', `${user}`);
             core.setOutput('organization', organization);
             core.setOutput('repository', repository);
       - run: |
