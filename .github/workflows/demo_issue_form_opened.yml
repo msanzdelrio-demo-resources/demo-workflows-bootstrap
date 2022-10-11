@@ -18,8 +18,12 @@ on:
 #       repository_name: ${{ github.event.issue.body.repository }}
 
 jobs:
-  create_demo:
+  parse_issue_labels:
     runs-on: ubuntu-20.04
+    outputs:
+      user: ${{ steps.parse.outputs.payload.User-Handle }}
+      organization: ${{ steps.parse.outputs.payload.Target-Organization }}
+      reposiroty: ${{ steps.parse.outputs.payload.Demo-Repository }}
     steps:
       - name: Run Issue form parser
         id: parse
@@ -29,5 +33,14 @@ jobs:
           separator: '###'
           label_marker_start: '>>'
           label_marker_end: '<<'
-      - run: |
-          echo "${{ steps.parse.outputs.payload }}"
+  trigger_demo_creation:
+    needs:
+      - parse_issue_labels
+    if: |
+      contains(github.event.issue.labels.*.name, 'demo')
+      && contains(github.event.issue.labels.*.name, 'template')
+    uses: msanzdelrio-demo-resources/demo-workflows-bootstrap/.github/workflows/demo_create.yml@main
+    with:
+      user_name: ${{ github.needs.parse_issue_labels.outputs.user }}
+      organization_name: ${{ github.needs.parse_issue_labels.outputs.organization }}
+      repository_name: ${{ github.needs.parse_issue_labels.outputs.reposiroty }}
