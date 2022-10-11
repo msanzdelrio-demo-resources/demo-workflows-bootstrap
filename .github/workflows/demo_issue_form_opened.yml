@@ -1,91 +1,18 @@
 name: Demo Issue Form Opened
 
 on:
-  workflow_call:
-    inputs:
-      organization_name:
-        description: The name of the target organization
-        type: string
-        required: true
-      repository_name:
-        description: The name of the template repository
-        type: string
-        required: true
-  workflow_dispatch:
-    inputs:
-      organization_name:
-        description: The name of the target organization
-        type: string
-        required: true
-        default: margaritasdr
-      repository_name:
-        description: The name of the template repository
-        type: string
-        required: true 
-        default: tmpl-workflows-100 
+  issues:
+    types:
+      - opened
+      - reopened
 
 jobs:
-  create_demo:
-    name: Create Demo Repository and Resources
-    runs-on: ubuntu-20.04
-    environment:
-      name: ${{ inputs.repository_name }}
-    steps:
-
-      - name: Get Token for checkout origin organization
-        id: get_workflow_token_origin
-        uses: peter-murray/workflow-application-token-action@v1
-        with:
-          application_id: ${{ secrets.APP_ID }}
-          application_private_key: ${{ secrets.APP_SECRET }}
-          organization: msanzdelrio-demo-resources
-
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Checkout template Repository
-        uses: actions/checkout@v3
-        with:
-          repository: msanzdelrio-demo-resources/${{ inputs.repository_name }}
-          ref: main
-          token: ${{ steps.get_workflow_token_origin.outputs.token }}
-          persist-credentials: false
-          path: template
-
-      - name: Get Token for checkout target organizatiom
-        id: get_workflow_token_target
-        uses: peter-murray/workflow-application-token-action@v1
-        with:
-          application_id: ${{ secrets.APP_ID }}
-          application_private_key: ${{ secrets.APP_SECRET }}
-          organization: ${{ inputs.organization_name }}
-
-      - name: Create target repository
-        id: create_repository
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ steps.get_workflow_token_target.outputs.token }}
-          script: |
-            github.rest.repos.createInOrg({
-              org: '${{ inputs.organization_name }}',
-              name: '${{ inputs.repository_name }}',
-            });
-
-      - name: Push repository changes
-        env:
-          GITHUB_TOKEN: ${{ steps.get_workflow_token_target.outputs.token }}
-        run: |
-          git config --global init.defaultBranch main
-          git config --global user.email "msanzdelrio@github.com"
-          git config --global user.name "Octobot"
-          git clone https://${{ secrets.APP_ID }}:${{ env.GITHUB_TOKEN }}@github.com/${{ inputs.organization_name }}/${{ inputs.repository_name }}.git
-          cp -r ./template/** ./${{ inputs.repository_name }}
-          cp -r ./template/.github/** ./${{ inputs.repository_name }}/.github/
-          cd ./${{ inputs.repository_name }}
-          rm -rf ./.git/
-          git init
-          git remote add origin https://${{ secrets.APP_ID }}:${{ env.GITHUB_TOKEN }}@github.com/${{ inputs.organization_name }}/${{ inputs.repository_name }}.git
-          git add .
-          git commit -m "initial commit"
-          git branch -M main
-          git push -u origin main
+  parse_issue_labels:
+    if: |
+      contains(github.event.issue.labels.*.name, 'demo')
+      && contains(github.event.issue.labels.*.name, 'template')
+    uses: msanzdelrio-demo-resources/demo-workflows-bootstrap/.github/workflows/demo_create.yml@main
+    with:
+      user_name: ${{ github.event.issue.body.user }}
+      organization_name: ${{ github.event.issue.body.organization }}
+      repository_name: ${{ github.event.issue.body.repository }}

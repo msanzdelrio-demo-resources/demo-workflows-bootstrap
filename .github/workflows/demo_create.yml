@@ -1,0 +1,99 @@
+name: Create demo repository
+
+on:
+  workflow_call:
+    inputs:
+      user_name:
+        description: The name of the user who created the repository
+        type: string
+        requierd: true
+      organization_name:
+        description: The name of the target organization
+        type: string
+        required: true
+      repository_name:
+        description: The name of the template repository
+        type: string
+        required: true
+  workflow_dispatch:
+    inputs:
+      user_name:
+        description: The name of the user who created the repository
+        type: string
+        requierd: true
+        default: msanzdelrio
+      organization_name:
+        description: The name of the target organization
+        type: string
+        required: true
+        default: margaritasdr
+      repository_name:
+        description: The name of the template repository
+        type: string
+        required: true 
+        default: tmpl-workflows-100 
+
+jobs:
+  create_demo:
+    name: Create Demo Repository and Resources
+    runs-on: ubuntu-20.04
+    steps:
+
+      - name: Get Token for checkout origin organization
+        id: get_workflow_token_origin
+        uses: peter-murray/workflow-application-token-action@v1
+        with:
+          application_id: ${{ secrets.APP_ID }}
+          application_private_key: ${{ secrets.APP_SECRET }}
+          organization: msanzdelrio-demo-resources
+
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Checkout template Repository
+        uses: actions/checkout@v3
+        with:
+          repository: msanzdelrio-demo-resources/${{ inputs.repository_name }}
+          ref: main
+          token: ${{ steps.get_workflow_token_origin.outputs.token }}
+          persist-credentials: false
+          path: template
+
+      - name: Get Token for checkout target organizatiom
+        id: get_workflow_token_target
+        uses: peter-murray/workflow-application-token-action@v1
+        with:
+          application_id: ${{ secrets.APP_ID }}
+          application_private_key: ${{ secrets.APP_SECRET }}
+          organization: ${{ inputs.organization_name }}
+
+      - name: Create target repository
+        id: create_repository
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ steps.get_workflow_token_target.outputs.token }}
+          script: |
+            github.rest.repos.createInOrg({
+              org: '${{ inputs.organization_name }}',
+              name: '${{ inputs.repository_name }}-${{ inputs.user_name }}',
+            });
+
+      - name: Push repository changes
+        env:
+          GITHUB_TOKEN: ${{ steps.get_workflow_token_target.outputs.token }}
+          repository: ${{ inputs.repository_name }}-${{ inputs.user_name }}
+        run: |
+          git config --global init.defaultBranch main
+          git config --global user.email "msanzdelrio@github.com"
+          git config --global user.name "Octobot"
+          git clone https://${{ secrets.APP_ID }}:${{ env.GITHUB_TOKEN }}@github.com/${{ inputs.organization_name }}/${{ env.repository }}.git
+          cp -r ./template/** ./${{ env.repository }}
+          cp -r ./template/.github/** ./${{ env.repository }}/.github/
+          cd ./${{ env.repository }}
+          rm -rf ./.git/
+          git init
+          git remote add origin https://${{ secrets.APP_ID }}:${{ env.GITHUB_TOKEN }}@github.com/${{ inputs.organization_name }}/${{ env.repository }}.git
+          git add .
+          git commit -m "initial commit"
+          git branch -M main
+          git push -u origin main
