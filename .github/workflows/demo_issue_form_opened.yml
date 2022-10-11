@@ -77,10 +77,12 @@ jobs:
           GITHUB_TOKEN: ${{ steps.get_workflow_token_target.outputs.token }}
         run: |
           git config --global init.defaultBranch main
+          git config --global user.email "msanzdelrio@github.com"
+          git config --global user.name "Octobot"
           git clone https://${{ secrets.APP_ID }}:${{ env.GITHUB_TOKEN }}@github.com/${{ inputs.organization_name }}/${{ inputs.repository_name }}.git
           ls -la
           cp -r ./template/** ./${{ inputs.repository_name }}
-          cp -r ./template/.github/** ./${{ inputs.repository_name }}
+          cp -r ./template/.github/** ./${{ inputs.repository_name }}/.github/
           ls -la ./${{ inputs.repository_name }}
           cd ./${{ inputs.repository_name }}
           rm -rf ./.git/
