@@ -13,6 +13,6 @@ jobs:
       && contains(github.event.issue.labels.*.name, 'template')
     uses: msanzdelrio-demo-resources/demo-workflows-bootstrap/.github/workflows/demo_create.yml@main
     with:
-      user_name: ${{ github.event.issue.body.user }}
-      organization_name: ${{ github.event.issue.body.organization }}
+      user_name: ${{ github.event.issue.body.user.name }}
+      organization_name: ${{ github.event.issue.body.organization.value }}
       repository_name: ${{ github.event.issue.body.repository }}
