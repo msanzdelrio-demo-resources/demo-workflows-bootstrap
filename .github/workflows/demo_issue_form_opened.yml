@@ -58,6 +58,6 @@ jobs:
       && contains(github.event.issue.labels.*.name, 'template')
     uses: msanzdelrio-demo-resources/demo-workflows-bootstrap/.github/workflows/demo_create.yml@main
     with:
-      user_name: ${{ github.needs.parse_issue_labels.outputs.user }}
-      organization_name: ${{ github.needs.parse_issue_labels.outputs.organization }}
-      repository_name: ${{ github.needs.parse_issue_labels.outputs.repository }}
+      user_name: ${{ needs.parse_issue_labels.outputs.user }}
+      organization_name: ${{ needs.parse_issue_labels.outputs.organization }}
+      repository_name: ${{ needs.parse_issue_labels.outputs.repository }}
