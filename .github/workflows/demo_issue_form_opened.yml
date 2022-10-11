@@ -33,6 +33,10 @@ jobs:
           separator: '###'
           label_marker_start: '>>'
           label_marker_end: '<<'
+      - name: Show parsed data JSON
+        run: |
+          echo "${{ steps.parse.outputs.payload.User-Handle }}"
+          echo "${{ steps.parse.outputs.payload.Target-Organization }}"
   trigger_demo_creation:
     needs:
       - parse_issue_labels
