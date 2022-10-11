@@ -12,13 +12,21 @@ body:
       value: |
         Please, fill in the following fields to get started with your GitHub workflows demo repository!🚀
   - type: input
+    id: user
+    attributes:
+      label: User handle
+      description: Who will be the ownr of the repository?
+      placeholder: octocat
+    validations:
+      required: true
+  - type: input
     id: organization
     attributes:
       label: Target organization
       description: Where do you want the repository to get deployed to?
       placeholder: myorg
     validations:
-      required: false
+      required: true
   - type: dropdown
     id: repository
     attributes:
