@@ -30,4 +30,4 @@ jobs:
           label_marker_start: '>>'
           label_marker_end: '<<'
       - run: |
-          echo "${{ steps.parse.outputs.payload.user }}"
+          echo "${{ steps.parse.outputs.payload }}"
