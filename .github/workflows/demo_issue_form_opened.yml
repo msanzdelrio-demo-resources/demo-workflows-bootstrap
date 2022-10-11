@@ -42,9 +42,9 @@ jobs:
         with:
           script: |
             demoPayload = JSON.parse(process.env.demo_payload);
-            core.setOutput('user', demoPayload['User-Handle']);
-            core.setOutput('organization', demoPayload['Target-Organization']);
-            core.setOutput('repository', demoPayload['Demo-Repository']);
+            core.setOutput('user', ${demoPayload['User-Handle']});
+            core.setOutput('organization', ${demoPayload['Target-Organization']});
+            core.setOutput('repository', ${demoPayload['Demo-Repository']});
 
   trigger_demo_creation:
     needs:
