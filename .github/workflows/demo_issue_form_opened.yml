@@ -78,8 +78,9 @@ jobs:
           cd ./template
           git config --global user.email "msanzdelrio@github.com"
           git config --global user.name "msanzdelriodemo"
+          git config --global init.defaultBranch main
           rm -rf .git
           git init
-          git remote set-url origin https://${{ secrets.APP_ID }}:${{ env.GITHUB_TOKEN }}@github.com/${{ inputs.organization_name }}/${{ inputs.repository_name }}.git
+          git remote add origin https://${{ secrets.APP_ID }}:${{ env.GITHUB_TOKEN }}@github.com/${{ inputs.organization_name }}/${{ inputs.repository_name }}.git
           git add .
           git push
