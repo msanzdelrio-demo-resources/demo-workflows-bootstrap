@@ -76,13 +76,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.get_workflow_token_target.outputs.token }}
         run: |
-          git clone https://${{ secrets.APP_ID }}:${{ env.GITHUB_TOKEN }}@github.com/${{ inputs.GITHUB_REPOSITORY_OWNER }}/${{ inputs.repository_name }}.git
+          git clone https://${{ secrets.APP_ID }}:${{ env.GITHUB_TOKEN }}@github.com/${{ inputs.organization_name }}/${{ inputs.repository_name }}.git
           rm -rf /template/.git
           ls -la /template
           cp -r /template /${{ inputs.repository_name }}
           ls -la /${{ inputs.repository_name }}
           cd ${{ inputs.repository_name }}
           git init
-          git remote add origin https://${{ secrets.APP_ID }}:${{ env.GITHUB_TOKEN }}@github.com/${{ inputs.GITHUB_REPOSITORY_OWNER }}/${{ inputs.repository_name }}.git
+          git remote add origin https://${{ secrets.APP_ID }}:${{ env.GITHUB_TOKEN }}@github.com/${{ inputs.organization_name }}/${{ inputs.repository_name }}.git
           git add .
           git push -u origin main
