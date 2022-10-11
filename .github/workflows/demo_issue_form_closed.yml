@@ -1,0 +1,54 @@
+name: Demo Issue Form Closed
+
+on:
+  issues:
+    types:
+      - closed
+
+jobs:
+  parse_issue_labels:
+    runs-on: ubuntu-20.04
+    outputs:
+      user: ${{ steps.generate_variables.outputs.user }}
+      organization: ${{ steps.generate_variables.outputs.organization }}
+      repository: ${{ steps.generate_variables.outputs.repository }}
+    steps:
+      - name: Run Issue form parser
+        id: parse
+        uses: peter-murray/issue-forms-body-parser@v2.0.0
+        with:
+          issue_id: ${{ github.event.issue.number }}
+          separator: '###'
+          label_marker_start: '>>'
+          label_marker_end: '<<'
+
+      - name: Publish output variables
+        uses: actions/github-script@v5
+        id: generate_variables
+        env:
+          demo_payload: ${{ steps.parse.outputs.payload  }}
+        with:
+          script: |
+            demoPayload = JSON.parse(process.env.demo_payload);
+            const user = demoPayload['User-Handle'];
+            const organization = demoPayload['Target-Organization'];
+            const repository = demoPayload['Demo-Repository'];
+
+            core.setOutput('user', `${user}`);
+            core.setOutput('organization', `${organization}`);
+            core.setOutput('repository', `${repository}`);
+
+  trigger_demo_creation:
+    needs:
+      - parse_issue_labels
+    if: |
+      contains(github.event.issue.labels.*.name, 'demo')
+      && contains(github.event.issue.labels.*.name, 'template')
+    uses: msanzdelrio-demo-resources/demo-workflows-bootstrap/.github/workflows/demo_remove.yml@main
+    with:
+      user_name: ${{ needs.parse_issue_labels.outputs.user }}
+      organization_name: ${{ needs.parse_issue_labels.outputs.organization }}
+      repository_name: ${{ needs.parse_issue_labels.outputs.repository }}
+    secrets:
+      APP_ID: ${{ secrets.APP_ID }}
+      APP_SECRET: ${{ secrets.APP_SECRET }}
