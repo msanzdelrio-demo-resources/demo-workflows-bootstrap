@@ -79,7 +79,8 @@ jobs:
           git config --global init.defaultBranch main
           git clone https://${{ secrets.APP_ID }}:${{ env.GITHUB_TOKEN }}@github.com/${{ inputs.organization_name }}/${{ inputs.repository_name }}.git
           ls -la
-          cp -r ./template/* ./${{ inputs.repository_name }}
+          cp -r ./template/** ./${{ inputs.repository_name }}
+          cp -r ./template/.github/** ./${{ inputs.repository_name }}
           ls -la ./${{ inputs.repository_name }}
           cd ./${{ inputs.repository_name }}
           rm -rf ./.git/
@@ -87,4 +88,6 @@ jobs:
           git init
           git remote add origin https://${{ secrets.APP_ID }}:${{ env.GITHUB_TOKEN }}@github.com/${{ inputs.organization_name }}/${{ inputs.repository_name }}.git
           git add .
+          git commit -m "initial commit"
+          git branch -M main
           git push -u origin main
