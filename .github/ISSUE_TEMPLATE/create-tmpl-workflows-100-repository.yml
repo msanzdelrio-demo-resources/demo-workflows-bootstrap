@@ -3,6 +3,7 @@ name: Create demo repository
 description: This issue will trigger an automation to create a demo repository
   in the chosen organization.
 title: tmpl-workflows-100 - [Demo]
+labels: "Demo,Workflow🚀"
 assignees:
   - octocat
 body:
