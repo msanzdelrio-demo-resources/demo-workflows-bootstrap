@@ -1,9 +1,9 @@
 ---
 name: Create demo repository
-about: This issue will trigger an automation to create a demo repository
+description: This issue will trigger an automation to create a demo repository
   in the chosen organization.
 title: tmpl-workflows-100 - [Demo]
-labels: ''
+labels: ""
 assignees:
   - octocat
 body:
