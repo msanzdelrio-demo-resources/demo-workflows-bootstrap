@@ -33,7 +33,7 @@ jobs:
           separator: '###'
           label_marker_start: '>>'
           label_marker_end: '<<'
-          
+
       - name: Publish output variables
         uses: actions/github-script@v5
         id: generate_variables
@@ -41,7 +41,7 @@ jobs:
           demo_payload: ${{ steps.parse.outputs.payload  }}
         with:
           script: |
-            demoPayload = JSON.parse(env.demo_payload);
+            demoPayload = JSON.parse( ${{ env.demo_payload }} );
             core.setOutput('user', demoPayload['User-Handle']);
             core.setOutput('organization', demoPayload['Target-Organization']);
             core.setOutput('repository', demoPayload['Demo-Repository']);
