@@ -71,21 +71,13 @@ jobs:
               name: '${{ inputs.repository_name }}',
             });
 
-      - name: Get Token for checkout target organizatiom updated
-        id: get_workflow_token_target_updated
-        uses: peter-murray/workflow-application-token-action@v1
-        with:
-          application_id: ${{ secrets.APP_ID }}
-          application_private_key: ${{ secrets.APP_SECRET }}
-          organization: ${{ inputs.organization_name }}
-
       - name: Push repository changes
         env:
-          GITHUB_TOKEN: ${{ steps.get_workflow_token_target_updated.outputs.token }}
+          GITHUB_TOKEN: ${{ steps.get_workflow_token_target.outputs.token }}
         run: |
           cd ./template
           git config --global user.email "msanzdelrio@github.com"
           git config --global user.name "msanzdelriodemo"
-          git remote set-url origin https://${{ secrets.APP_ID }}:${{ env.GITHUB_TOKEN }}github.com/${{ inputs.organization_name }}/${{ inputs.repository_name }}.git
+          git remote set-url origin https://${{ secrets.APP_ID }}:${{ env.GITHUB_TOKEN }}@github.com/${{ inputs.organization_name }}/${{ inputs.repository_name }}.git
           git add .
           git push
