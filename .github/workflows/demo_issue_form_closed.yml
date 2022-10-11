@@ -38,7 +38,7 @@ jobs:
             core.setOutput('organization', `${organization}`);
             core.setOutput('repository', `${repository}`);
 
-  trigger_demo_creation:
+  trigger_demo_removal:
     needs:
       - parse_issue_labels
     if: |

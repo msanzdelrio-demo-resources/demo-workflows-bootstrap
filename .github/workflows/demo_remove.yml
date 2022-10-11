@@ -41,8 +41,8 @@ on:
         default: tmpl-workflows-100 
 
 jobs:
-  create_demo:
-    name: Create Demo Repository and Resources
+  remove_demo:
+    name: Remove Demo Repository and Resources
     runs-on: ubuntu-20.04
     steps:
 
