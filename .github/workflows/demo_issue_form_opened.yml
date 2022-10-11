@@ -42,7 +42,8 @@ jobs:
         with:
           script: |
             demoPayload = JSON.parse(process.env.demo_payload);
-            const user = demoPayload["User-Handle"];
+            const user = demoPayload['User-Handle'];
+            echo "demoPayload"
             const organization = demoPayload['Target-Organization'];
             const repository = demoPayload['Demo-Repository'];
             core.setOutput('user', user);
