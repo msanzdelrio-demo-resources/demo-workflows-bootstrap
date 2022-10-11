@@ -50,7 +50,7 @@ jobs:
             core.setOutput('organization', organization);
             core.setOutput('repository', repository);
       - run: |
-          echo "${{ steps.generate_variables_output.user }}"
+          echo "${{ steps.generate_variables.outputs.user }}"
 
   # trigger_demo_creation:
   #   needs:
