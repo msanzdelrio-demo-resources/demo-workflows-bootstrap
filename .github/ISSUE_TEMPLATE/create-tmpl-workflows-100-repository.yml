@@ -14,7 +14,7 @@ body:
   - type: input
     id: user
     attributes:
-      label: >>User handle<<
+      label: ">>User handle<<"
       description: Who will be the ownr of the repository?
       placeholder: octocat
     validations:
@@ -22,7 +22,7 @@ body:
   - type: input
     id: organization
     attributes:
-      label: >>Target organization<<
+      label: ">>Target organization<<"
       description: Where do you want the repository to get deployed to?
       placeholder: myorg
     validations:
@@ -30,7 +30,7 @@ body:
   - type: dropdown
     id: repository
     attributes:
-      label: >>Demo repository<<
+      label: ">>Demo repository<<"
       description: Please, select the demo repository you want to deploy
       options:
         - tmpl-workflows-100
