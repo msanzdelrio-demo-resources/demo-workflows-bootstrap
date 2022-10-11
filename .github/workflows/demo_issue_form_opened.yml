@@ -79,9 +79,9 @@ jobs:
           git clone https://${{ secrets.APP_ID }}:${{ env.GITHUB_TOKEN }}@github.com/${{ inputs.organization_name }}/${{ inputs.repository_name }}.git
           ls -la
           ls -la ./template
-          cp -r ./template ./${{ inputs.repository_name }}
+          cp -r ./template/** ./${{ inputs.repository_name }}
           ls -la ./${{ inputs.repository_name }}
-          cd ${{ inputs.repository_name }}
+          cd ./${{ inputs.repository_name }}
           rm -rf ./.git/
           ls -la
           git init
