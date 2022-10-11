@@ -42,21 +42,23 @@ jobs:
         with:
           script: |
             demoPayload = JSON.parse(process.env.demo_payload);
-            const user = demoPayload['User-Handle'];
+            const user = demoPayload["User-Handle"];
             const organization = demoPayload['Target-Organization'];
             const repository = demoPayload['Demo-Repository'];
             core.setOutput('user', user);
             core.setOutput('organization', organization);
             core.setOutput('repository', repository);
+      - run: |
+          echo "${{ steps.generate_variables_output.user }}"
 
-  trigger_demo_creation:
-    needs:
-      - parse_issue_labels
-    if: |
-      contains(github.event.issue.labels.*.name, 'demo')
-      && contains(github.event.issue.labels.*.name, 'template')
-    uses: msanzdelrio-demo-resources/demo-workflows-bootstrap/.github/workflows/demo_create.yml@main
-    with:
-      user_name: ${{ github.needs.parse_issue_labels.outputs.user }}
-      organization_name: ${{ github.needs.parse_issue_labels.outputs.organization }}
-      repository_name: ${{ github.needs.parse_issue_labels.outputs.repository }}
+  # trigger_demo_creation:
+  #   needs:
+  #     - parse_issue_labels
+  #   if: |
+  #     contains(github.event.issue.labels.*.name, 'demo')
+  #     && contains(github.event.issue.labels.*.name, 'template')
+  #   uses: msanzdelrio-demo-resources/demo-workflows-bootstrap/.github/workflows/demo_create.yml@main
+  #   with:
+  #     user_name: ${{ github.needs.parse_issue_labels.outputs.user }}
+  #     organization_name: ${{ github.needs.parse_issue_labels.outputs.organization }}
+  #     repository_name: ${{ github.needs.parse_issue_labels.outputs.repository }}
