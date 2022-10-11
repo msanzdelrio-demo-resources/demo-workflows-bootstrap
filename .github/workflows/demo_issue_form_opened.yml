@@ -21,9 +21,9 @@ jobs:
   parse_issue_labels:
     runs-on: ubuntu-20.04
     outputs:
-      user: ${{ steps.parse.outputs.payload.User-Handle }}
-      organization: ${{ steps.parse.outputs.payload.Target-Organization }}
-      reposiroty: ${{ steps.parse.outputs.payload.Demo-Repository }}
+      user: ${{ steps.generate_variables.outputs.user }}
+      organization: ${{ steps.generate_variables.outputs.organization }}
+      repository: ${{ steps.generate_variables.outputs.repository }}
     steps:
       - name: Run Issue form parser
         id: parse
@@ -33,10 +33,17 @@ jobs:
           separator: '###'
           label_marker_start: '>>'
           label_marker_end: '<<'
-      - name: Show parsed data JSON
-        run: |
-          echo "${{ steps.parse.outputs.payload.User-Handle }}"
-          echo "${{ steps.parse.outputs.payload.Target-Organization }}"
+      - name: Publish output variables
+        uses: actions/github-script@v5
+        id: generate_variables
+        env:
+          demo_payload: ${{ steps.parse.outputs.payload  }}
+        with:
+          script: |
+            demoPayload = JSON.parse($process.env.demo_payload);
+            core.setOutput('user', demoPayload['User-Handle']);
+            core.setOutput('organization', demoPayload['Target-Organization']);
+            core.setOutput('repository', demoPayload['Demo-Repository']);
   trigger_demo_creation:
     needs:
       - parse_issue_labels
@@ -47,4 +54,4 @@ jobs:
     with:
       user_name: ${{ github.needs.parse_issue_labels.outputs.user }}
       organization_name: ${{ github.needs.parse_issue_labels.outputs.organization }}
-      repository_name: ${{ github.needs.parse_issue_labels.outputs.reposiroty }}
+      repository_name: ${{ github.needs.parse_issue_labels.outputs.repository }}
