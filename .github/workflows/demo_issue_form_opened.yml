@@ -6,13 +6,20 @@ on:
       - opened
       - reopened
 
+# jobs:
+#   parse_issue_labels:
+#     if: |
+#       contains(github.event.issue.labels.*.name, 'demo')
+#       && contains(github.event.issue.labels.*.name, 'template')
+#     uses: msanzdelrio-demo-resources/demo-workflows-bootstrap/.github/workflows/demo_create.yml@main
+#     with:
+#       user_name: ${{ github.event.issue.body.user.name }}
+#       organization_name: ${{ github.event.issue.body.organization.value }}
+#       repository_name: ${{ github.event.issue.body.repository }}
+
 jobs:
-  parse_issue_labels:
-    if: |
-      contains(github.event.issue.labels.*.name, 'demo')
-      && contains(github.event.issue.labels.*.name, 'template')
-    uses: msanzdelrio-demo-resources/demo-workflows-bootstrap/.github/workflows/demo_create.yml@main
-    with:
-      user_name: ${{ github.event.issue.body.user.name }}
-      organization_name: ${{ github.event.issue.body.organization.value }}
-      repository_name: ${{ github.event.issue.body.repository }}
+  create_demo:
+    runs-on: ubuntu-20.04
+    steps:
+      - run: |
+          echo ${{ github.event.issue.body }}
