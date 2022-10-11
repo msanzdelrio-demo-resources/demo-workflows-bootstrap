@@ -15,6 +15,13 @@ on:
         description: The name of the template repository
         type: string
         required: true
+    secrets:
+      APP_ID:
+        description: 'GitHub App ID'
+        required: true
+      APP_SECRET:
+        description: 'GitHub App key'
+        required: true
   workflow_dispatch:
     inputs:
       user_name:
