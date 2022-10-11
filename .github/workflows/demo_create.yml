@@ -6,7 +6,7 @@ on:
       user_name:
         description: The name of the user who created the repository
         type: string
-        requierd: true
+        required: true
       organization_name:
         description: The name of the target organization
         type: string
@@ -20,7 +20,7 @@ on:
       user_name:
         description: The name of the user who created the repository
         type: string
-        requierd: true
+        required: true
         default: msanzdelrio
       organization_name:
         description: The name of the target organization
