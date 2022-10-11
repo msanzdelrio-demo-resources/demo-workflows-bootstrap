@@ -60,6 +60,17 @@ jobs:
           application_private_key: ${{ secrets.APP_SECRET }}
           organization: ${{ inputs.organization_name }}
 
+      - name: Create target repository
+        id: create_repository
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ steps.get_workflow_token_target.outputs.token }}
+          script: |
+            github.rest.repos.createInOrg({
+              org: '${{ inputs.organization_name }}',
+              name: '${{ inputs.repository_name }}',
+            });
+
       - name: Push repository changes
         env:
           GITHUB_TOKEN: ${{ steps.get_workflow_token_target.outputs.token }}
