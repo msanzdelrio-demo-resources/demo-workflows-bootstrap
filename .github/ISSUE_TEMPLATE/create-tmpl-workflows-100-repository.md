@@ -1,11 +1,30 @@
 ---
-name: Create tmpl-workflows-100 repository
-about: This issue will trigger an automation to create a tmpl-workflows-100 repository
+name: Create demo repository
+about: This issue will trigger an automation to create a demo repository
   in the chosen organization.
 title: tmpl-workflows-100 - [Demo]
-labels: ''
-assignees: ''
-
----
-
-Example of demo templates
+labels: ["Demo", "Workflows"]
+assignees:
+  - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please, fill in the following fields to get started with your GitHub workflows demo repository!🚀
+  - type: input
+    id: organization
+    attributes:
+      label: Target organization
+      description: Where do you want the repository to get deployed to?
+      placeholder: myorg
+    validations:
+      required: false
+  - type: dropdown
+    id: repository
+    attributes:
+      label: Demo repository
+      description: Please, select the demo repository you want to deploy
+      options:
+        - tmpl-workflows-100
+    validations:
+      required: true
